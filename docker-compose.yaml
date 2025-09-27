@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "5010:5010"
+    networks:
+      - app-network        # <— Add this line
+    volumes:
+      - .:/app
+      - ./loadingcsv:/app/loadingcsv
+      - ./output:/app/output
+      - ./logs:/app/logs
+    working_dir: /app
+    command: python csv_worker_api.py --host 0.0.0.0 --port 5010
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared3
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token eyJhIjoiYmFlNjUxMWQwM2NjYWU1MWZmOTZkOGJiNTYzMDg1NTYiLCJ0IjoiNzVmODA0YTItNmZiZC00ZWE4LTk3MTYtZGM5MWZmNmFkMmY5IiwicyI6Ill6a3lOR0kzWW1NdE5HSmtZeTAwTUdZeExXSmpNV0l0TW1FNVpXRXdaamc0TWpVMSJ9
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+networks:
+  app-network:
+    driver: bridge
