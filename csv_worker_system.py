@@ -469,6 +469,7 @@ class WorkerPool:
     def run(self):
         """Run the worker pool"""
         self.logger.info(f"Starting worker pool with {self.config.num_workers} workers")
+        self.config.num_workers=int(self.config.num_workers)
         self.logger.info(f"Watching directory: {self.config.watch_directory}")
         
         # Ensure watch directory exists
