@@ -84,7 +84,7 @@
   </div>
 
   <script>
-    const API_BASE = 'http://localhost:5009';
+    const API_BASE = '';
 
     async function apiCall(endpoint, method='GET', data) {
       const opts = { method, headers: { 'Content-Type': 'application/json' } };
@@ -208,7 +208,7 @@
       loadConfig();
       refreshStatus();
       refreshFiles();
-      setInterval(() => { refreshStatus(); refreshFiles(); }, 600);
+      setInterval(() => { refreshStatus(); refreshFiles(); }, 6000);
     };
   </script>
 </body>
