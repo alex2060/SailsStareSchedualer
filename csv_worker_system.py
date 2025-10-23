@@ -48,7 +48,7 @@ class WorkerConfig:
     # Server settings
     health_check_url: str = "https://go3.aimachengine.com/health"
     upload_timeout: int = 6000
-    request_timeout: int = 50
+    request_timeout: int = 500
     
     # Database
     mysql_uri: str = "mysql+pymysql://admin:RQApoaNQ@mysql-199933-0.cloudclusters.net:10033/working_db"
