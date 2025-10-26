@@ -94,7 +94,7 @@ class ServerManager:
     
 
 
-    
+
     def get_best_server(self) -> Optional[str]:
         """Get the best available healthy server URL not currently locked"""
         try:
@@ -432,7 +432,8 @@ class Worker:
             time.sleep(self.config.retry_delay)
             return False
         finally:
-            self.server_manager.release_server(server)
+            if server:
+                self.server_manager.release_server(server)
 
 
 
