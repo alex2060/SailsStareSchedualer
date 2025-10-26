@@ -92,8 +92,11 @@ class ServerManager:
         self.active_servers: Set[str] = set()
         self.lock = threading.Lock()
     
+
+
+    
     def get_best_server(self) -> Optional[str]:
-        """Get the best available server URL"""
+        """Get the best available healthy server URL not currently locked"""
         try:
             response = requests.get(
                 self.config.health_check_url,
@@ -103,22 +106,28 @@ class ServerManager:
             response.raise_for_status()
             
             data = response.json()
-            best_server = data.get('best_server', {})
-            
-            if best_server.get('health') == 'healthy':
-                server_url = best_server.get('url')
-                
-                with self.lock:
-                    if server_url and server_url not in self.active_servers:
-                        self.active_servers.add(server_url)
-                        return server_url
-            
+            all_servers = data.get('all_servers', [])
+
+            for server in all_servers:
+                if server.get('health') == 'healthy':
+                    server_url = server.get('url')
+                    with self.lock:
+                        if server_url in self.active_servers:
+                            self.logger.debug(f"locked server: {server_url}")
+                            continue
+                        if server_url:
+                            self.active_servers.add(server_url)
+                            return server_url
             return None
             
         except Exception as e:
             self.logger.error(f"Failed to get best server: {e}")
             raise ServerError(f"Health check failed: {e}")
-    
+
+
+
+
+
     def release_server(self, server_url: str):
         """Release a server back to the pool"""
         with self.lock:
@@ -273,7 +282,7 @@ class UploadClient:
             for line in response.iter_lines(decode_unicode=True, chunk_size=1024):
                 if line and line.strip():
                     timestamp = time.strftime("%H:%M:%S")
-                    self.logger.debug(f"[{timestamp}] Server: {line.strip()}")
+                    self.logger.debug(f"[{timestamp}] Server: {line.strip()} From "+self.server_url )
                     response_buffer.append(line.strip())
                     lines_processed += 1
             
@@ -423,8 +432,7 @@ class Worker:
             time.sleep(self.config.retry_delay)
             return False
         finally:
-            if server:
-                self.server_manager.release_server(server)
+            self.server_manager.release_server(server)
 
 
 
