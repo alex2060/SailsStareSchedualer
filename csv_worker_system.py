@@ -185,6 +185,15 @@ class FileManager:
                 return None
             
             # Sort by modification time (most recent first)
+            available_files = [
+                f for f in files 
+                if f not in self.processed_files and 'uploads' not in os.path.relpath(f, self.config.watch_directory)
+            ]
+            
+            if not available_files:
+                return None
+            
+            # Sort by modification time (most recent first)
             available_files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
             
             # Take the first available file (up to max_file_checks)
