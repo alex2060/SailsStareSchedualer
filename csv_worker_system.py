@@ -46,7 +46,7 @@ class WorkerConfig:
     output_directory: str = "output"
     
     # Server settings
-    health_check_url: str = "https://go3.aimachengine.com/health"
+    health_check_url: str = "http://host.docker.internal:10001/health"
     upload_timeout: int = 6000
     request_timeout: int = 500
     
@@ -616,7 +616,7 @@ Examples:
     parser.add_argument(
         '--health-url',
         type=str,
-        default='https://go3.aimachengine.com/health',
+        default='http://localhost:10001/health',
         help='Server health check URL'
     )
     

@@ -19,9 +19,9 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflared3
+    container_name: cloudflared4
     restart: unless-stopped
-    command: tunnel --no-autoupdate run --token eyJhIjoiYmFlNjUxMWQwM2NjYWU1MWZmOTZkOGJiNTYzMDg1NTYiLCJ0IjoiNzVmODA0YTItNmZiZC00ZWE4LTk3MTYtZGM5MWZmNmFkMmY5IiwicyI6Ill6a3lOR0kzWW1NdE5HSmtZeTAwTUdZeExXSmpNV0l0TW1FNVpXRXdaamc0TWpVMSJ9
+    command: tunnel --no-autoupdate run --token eyJhIjoiYmFlNjUxMWQwM2NjYWU1MWZmOTZkOGJiNTYzMDg1NTYiLCJ0IjoiYzg2OTMxNTQtODJkZi00NzE3LThiMWEtNDYzYWFhMTJhYjNjIiwicyI6IllUUXpOVEEyTmpVdE0yRTNaQzAwWXpjMkxUZ3dOR1l0WldZM1pERXlPRFU1WTJZeiJ9
     networks:
       - app-network
     depends_on:

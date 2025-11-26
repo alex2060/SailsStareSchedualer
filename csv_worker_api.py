@@ -105,8 +105,8 @@ class CSVWorkerAPI:
         def check_external_health():
             try:
                 import requests
-                health_url = self.config.health_check_url
-                response = requests.get(health_url, timeout=10)
+                health_url = "http://host.docker.internal:10001/health"
+                response = requests.get(health_url, timeout=200)
                 response.raise_for_status()
                 content = (
                     response.json()
